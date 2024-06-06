@@ -4,7 +4,7 @@ on:
     types:
       - closed
     branches:
-      - "master"
+      - 'main'
 jobs:
   build:
     name: Deploy Production
@@ -21,8 +21,8 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "./*"
-          target: "/home/deploymillion/bff-app/prod"
+          source: './*'
+          target: '/home/deploymillion/bff-app/prod'
 
       - name: Install Dependencies
         uses: appleboy/ssh-action@master
