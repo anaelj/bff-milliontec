@@ -6,7 +6,9 @@ export const getAuthToken = async (): Promise<string> => {
   const password = process.env.PASSWORD;
 
   if (!loginUrl || !email || !password) {
-    throw new Error('Login URL, email, or password is not defined in the environment variables');
+    throw new Error(
+      'Login URL, email, or password is not defined in the environment variables'
+    );
   }
 
   const response = await axios.post(loginUrl, {
