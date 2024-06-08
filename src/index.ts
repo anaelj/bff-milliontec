@@ -8,7 +8,23 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(morgan('dev'));
-app.use(cors());
+
+const allowedOrigins = [
+  'https://app.milliontech.com.br',
+  'https://beta.milliontech.com.br'
+];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      console.log('origin', origin);
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  })
+);
 
 app.get('/helps', async (req, res) => {
   try {
