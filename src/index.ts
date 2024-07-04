@@ -1,6 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import {getHelps} from './api';
+import {getHelps, getMillionZapCompany} from './api';
 import morgan from 'morgan';
 import cors from 'cors';
 dotenv.config();
@@ -36,6 +36,18 @@ app.get('/helps', async (req, res) => {
     res.json(helps);
   } catch (error) {
     console.log('error', error);
+    res.status(500).json({error: error.message});
+  }
+});
+
+app.get('/millionzap-company', async (req, res) => {
+  try {
+    const {searchParam, fieldName} = req.query;
+
+    const apiData = await getMillionZapCompany({searchParam, fieldName});
+    res.json(apiData);
+  } catch (error) {
+    // console.log('error', error);
     res.status(500).json({error: error.message});
   }
 });
