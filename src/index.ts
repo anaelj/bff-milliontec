@@ -1,6 +1,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import {createCompany, getHelps, getMillionZapCompany} from './api';
+import {
+  createCompany,
+  getHelps,
+  getMillionUserHash,
+  getMillionZapCompany
+} from './api';
 import morgan from 'morgan';
 import cors from 'cors';
 dotenv.config();
@@ -56,12 +61,12 @@ app.get('/millionzap/company', async (req, res) => {
   }
 });
 
-app.get('/millionzap/user/hash', async (req, res) => {
+app.get('/millionzap/user/hash/:email', async (req, res) => {
   try {
-    const {email} = req.query;
+    const {email} = req.params;
 
-    const apiData = await getMillionZapCompany({searchParam, fieldName});
-    res.json(apiData);
+    const apiData = await getMillionUserHash(email);
+    res.json({passwordHash: encodeURIComponent(apiData?.passwordHash)});
   } catch (error) {
     // console.log('error', error);
     res.status(500).json({error: error.message});
