@@ -56,6 +56,18 @@ app.get('/millionzap/company', async (req, res) => {
   }
 });
 
+app.get('/millionzap/user/hash', async (req, res) => {
+  try {
+    const {email} = req.query;
+
+    const apiData = await getMillionZapCompany({searchParam, fieldName});
+    res.json(apiData);
+  } catch (error) {
+    // console.log('error', error);
+    res.status(500).json({error: error.message});
+  }
+});
+
 app.post('/millionzap/company/create', async (req, res) => {
   try {
     const {body} = req;

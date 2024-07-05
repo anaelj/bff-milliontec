@@ -36,9 +36,6 @@ export const createCompany = async ({data}: MillionZapCompanyCreateParams) => {
     );
   }
 
-  console.log(url);
-  console.log(data);
-
   try {
     const response = await axios.post(url, data);
     return response.data;
@@ -62,7 +59,25 @@ export const getMillionZapCompany = async ({
     );
   }
 
-  console.log(url);
+  const response = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return response.data;
+};
+
+export const getMillionUserHash = async (email: string) => {
+  const token = await getAuthToken();
+
+  const url = `${process.env.MILLIONZAP_USER_HASH_URL}/${email}`;
+
+  if (!url) {
+    throw new Error(
+      'MILLIONZAP_USER_HASH_URL is not defined in the environment variables'
+    );
+  }
 
   const response = await axios.get(url, {
     headers: {
