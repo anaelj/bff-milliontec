@@ -6,6 +6,10 @@ interface MillionZapCompanyParams {
   fieldName?: any;
 }
 
+interface MillionZapCompanyCreateParams {
+  data: any;
+}
+
 export const getHelps = async () => {
   const token = await getAuthToken();
   const helpsUrl = process.env.HELPS_URL;
@@ -21,6 +25,27 @@ export const getHelps = async () => {
   });
 
   return response.data;
+};
+
+export const createCompany = async ({data}: MillionZapCompanyCreateParams) => {
+  const url = process.env.MILLIONZAP_COMPANY_CREATE_URL;
+
+  if (!url) {
+    throw new Error(
+      'MILLIONZAP_COMPANY_CREATE_URL is not defined in the environment variables'
+    );
+  }
+
+  console.log(url);
+  console.log(data);
+
+  try {
+    const response = await axios.post(url, data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 export const getMillionZapCompany = async ({
