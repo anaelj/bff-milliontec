@@ -68,6 +68,20 @@ export const getMillionZapCompany = async ({
   return response.data;
 };
 
+export const getMillionZapPlans = async () => {
+  const url = `${process.env.MILLIONZAP_PLANS_URL}`;
+
+  if (!url) {
+    throw new Error(
+      'MILLIONZAP_PLANS_URL is not defined in the environment variables'
+    );
+  }
+
+  const response = await axios.get(url);
+
+  return response.data;
+};
+
 export const getMillionUserHash = async (email: string) => {
   const token = await getAuthToken();
 

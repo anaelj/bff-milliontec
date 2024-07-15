@@ -4,7 +4,8 @@ import {
   createCompany,
   getHelps,
   getMillionUserHash,
-  getMillionZapCompany
+  getMillionZapCompany,
+  getMillionZapPlans
 } from './api';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -54,6 +55,16 @@ app.get('/millionzap/company', async (req, res) => {
     const {searchParam, fieldName} = req.query;
 
     const apiData = await getMillionZapCompany({searchParam, fieldName});
+    res.json(apiData);
+  } catch (error) {
+    // console.log('error', error);
+    res.status(500).json({error: error.message});
+  }
+});
+
+app.get('/millionzap/plans', async (req, res) => {
+  try {
+    const apiData = await getMillionZapPlans();
     res.json(apiData);
   } catch (error) {
     // console.log('error', error);
