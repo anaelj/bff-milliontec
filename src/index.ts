@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import {
   createCompany,
+  createContact,
+  createSchedule,
   getHelps,
   getMillionUserHash,
   getMillionZapCompany,
@@ -49,6 +51,48 @@ app.get('/helps', async (req, res) => {
     res.status(500).json({error: error.message});
   }
 });
+
+app.post('/millionzap/schedules/create', async (req, res) => {
+  try {
+    const {body} = req;
+
+    const authorizationHeader = req.headers.authorization || '';
+    const token = authorizationHeader.startsWith('Bearer ')
+      ? authorizationHeader.slice(7)
+      : '';
+
+    const apiData = await createSchedule({data: body, token});
+    res.json(apiData);
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+app.post('/millionzap/contacts/create', async (req, res) => {
+  try {
+    const {body} = req;
+    const authorizationHeader = req.headers.authorization || '';
+    const token = authorizationHeader.startsWith('Bearer ')
+      ? authorizationHeader.slice(7)
+      : '';
+
+    const apiData = await createContact({data: body, token});
+    res.json(apiData);
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+
+// https://api.beta.millionconversa.com/contacts/?searchParam=556791408260&pageNumber=1
+// {
+//   "contacts": [
+//       {
+//           "id": 19,
+// https://api.beta.millionconversa.com/contacts
+// {
+//   "name": "teste",
+//   "number": "5567984058383",
+//   "email": ""
+// }
 
 app.get('/millionzap/company', async (req, res) => {
   try {
