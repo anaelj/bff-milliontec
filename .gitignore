@@ -1,4 +1,4 @@
-.env
+.env*
 ormconfig.json
 .vscode
 node_modules

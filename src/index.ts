@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import {
   createCompany,
+  createContact,
+  createSchedule,
   getHelps,
   getMillionUserHash,
   getMillionZapCompany,
@@ -9,6 +11,8 @@ import {
 } from './api';
 import morgan from 'morgan';
 import cors from 'cors';
+import {getAuthToken} from './auth';
+import axios from 'axios';
 dotenv.config();
 
 const app = express();
@@ -46,6 +50,49 @@ app.get('/helps', async (req, res) => {
     res.json(helps);
   } catch (error) {
     console.log('error', error);
+    res.status(500).json({error: error.message});
+  }
+});
+
+app.post('/millionzap/login', async (req, res) => {
+  try {
+    const {body} = req;
+    const {passwordHash, email} = body;
+    console.log(body);
+    const data = await getAuthToken(undefined, email);
+    console.log(data);
+    res.json(data);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+app.post('/millionzap/schedules/create', async (req, res) => {
+  try {
+    const {body} = req;
+
+    const authorizationHeader = req.headers.authorization || '';
+    const token = authorizationHeader.startsWith('Bearer ')
+      ? authorizationHeader.slice(7)
+      : '';
+
+    const apiData = await createSchedule({data: body, token});
+    res.json(apiData);
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+app.post('/millionzap/contacts/create', async (req, res) => {
+  try {
+    const {body} = req;
+    const authorizationHeader = req.headers.authorization || '';
+    const token = authorizationHeader.startsWith('Bearer ')
+      ? authorizationHeader.slice(7)
+      : '';
+
+    const apiData = await createContact({data: body, token});
+    res.json(apiData);
+  } catch (error) {
     res.status(500).json({error: error.message});
   }
 });
@@ -128,17 +175,3 @@ app.post('/millionzap', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-// https://api.beta.millionconversa.com/companies/cadastro
-
-// {
-//   "name": "empresa de teste 01",
-//   "email": "teste01@gmail.com",
-//   "phone": "67984058301",
-//   "password": "123456",
-//   "planId": 5,
-//   "recurrence": "MENSAL",
-//   "dueDate": "2024-07-05T16:21:04-04:00",
-//   "status": "t",
-//   "campaignsEnabled": true
-// }

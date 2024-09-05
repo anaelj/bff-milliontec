@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-export const getAuthToken = async (): Promise<string> => {
+export const getAuthToken = async (
+  paramPasswordHash?: string,
+  paramEmail?: string
+): Promise<any> => {
   const loginUrl = process.env.LOGIN_URL;
-  const email = process.env.EMAIL;
+  const email = paramEmail || process.env.EMAIL;
   const password = process.env.PASSWORD;
 
   if (!loginUrl || !email || !password) {
@@ -11,10 +14,13 @@ export const getAuthToken = async (): Promise<string> => {
     );
   }
 
+  console.log(paramPasswordHash, email);
+
   const response = await axios.post(loginUrl, {
     email,
-    password
+    password: !paramPasswordHash && password,
+    passwordHash: paramPasswordHash
   });
 
-  return response.data.token;
+  return response.data;
 };
