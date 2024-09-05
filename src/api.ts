@@ -12,7 +12,7 @@ interface MillionZapCompanyCreateParams {
 }
 
 export const getHelps = async () => {
-  const token = await getAuthToken();
+  const {token} = await getAuthToken();
   const helpsUrl = process.env.HELPS_URL;
 
   if (!helpsUrl) {
@@ -147,7 +147,7 @@ export const getMillionZapCompany = async ({
   searchParam,
   fieldName
 }: MillionZapCompanyParams) => {
-  const token = await getAuthToken();
+  const {token} = await getAuthToken();
 
   const url = `${process.env.MILLIONZAP_COMPANY_SEARCH_URL}?searchParam=${searchParam}&fieldName=${fieldName}`;
 
@@ -181,7 +181,7 @@ export const getMillionZapPlans = async () => {
 };
 
 export const getMillionUserHash = async (email: string) => {
-  const token = await getAuthToken();
+  const {token} = await getAuthToken();
 
   const url = `${process.env.MILLIONZAP_USER_HASH_URL}/${email}`;
 

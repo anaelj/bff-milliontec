@@ -11,6 +11,8 @@ import {
 } from './api';
 import morgan from 'morgan';
 import cors from 'cors';
+import {getAuthToken} from './auth';
+import axios from 'axios';
 dotenv.config();
 
 const app = express();
@@ -52,6 +54,19 @@ app.get('/helps', async (req, res) => {
   }
 });
 
+app.post('/millionzap/login', async (req, res) => {
+  try {
+    const {body} = req;
+    const {passwordHash, email} = body;
+    console.log(body);
+    const data = await getAuthToken(undefined, email);
+    console.log(data);
+    res.json(data);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
 app.post('/millionzap/schedules/create', async (req, res) => {
   try {
     const {body} = req;
@@ -81,18 +96,6 @@ app.post('/millionzap/contacts/create', async (req, res) => {
     res.status(500).json({error: error.message});
   }
 });
-
-// https://api.beta.millionconversa.com/contacts/?searchParam=556791408260&pageNumber=1
-// {
-//   "contacts": [
-//       {
-//           "id": 19,
-// https://api.beta.millionconversa.com/contacts
-// {
-//   "name": "teste",
-//   "number": "5567984058383",
-//   "email": ""
-// }
 
 app.get('/millionzap/company', async (req, res) => {
   try {
@@ -172,17 +175,3 @@ app.post('/millionzap', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-// https://api.beta.millionconversa.com/companies/cadastro
-
-// {
-//   "name": "empresa de teste 01",
-//   "email": "teste01@gmail.com",
-//   "phone": "67984058301",
-//   "password": "123456",
-//   "planId": 5,
-//   "recurrence": "MENSAL",
-//   "dueDate": "2024-07-05T16:21:04-04:00",
-//   "status": "t",
-//   "campaignsEnabled": true
-// }
