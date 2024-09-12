@@ -59,7 +59,7 @@ app.post('/millionzap/login', async (req, res) => {
     const {body} = req;
     const {passwordHash, email} = body;
     console.log(body);
-    const data = await getAuthToken(undefined, email);
+    const data = await getAuthToken(passwordHash, email);
     console.log(data);
     res.json(data);
   } catch (error) {

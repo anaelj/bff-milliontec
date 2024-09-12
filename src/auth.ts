@@ -14,7 +14,7 @@ export const getAuthToken = async (
     );
   }
 
-  console.log(paramPasswordHash, email);
+  // console.log(paramPasswordHash, email);
 
   const response = await axios.post(loginUrl, {
     email,
