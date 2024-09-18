@@ -38,6 +38,21 @@ export const createCompany = async ({data}: MillionZapCompanyCreateParams) => {
   }
 
   try {
+    const {token} = await getAuthToken();
+    const {data: companyData} = await axios.get(
+      'https://api.millionconversa.com/companies/list',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    const companyExists = companyData?.find(item =>
+      item.name.includes(data.name)
+    );
+
+    if (companyExists) return companyExists;
+
     const response = await axios.post(url, data);
     return response.data;
   } catch (error) {
